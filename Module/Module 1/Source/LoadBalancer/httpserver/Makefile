@@ -1,4 +1,4 @@
-JAR = target\httpserver-1.0-SNAPSHOT.jar
+JAR = ./target/httpserver-1.0-SNAPSHOT.jar
 MAIN = org.example.Main
 PORT = 9000
 

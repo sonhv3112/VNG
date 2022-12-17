@@ -367,6 +367,56 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 
 ## Bài tập
 
+Đầu tiên ta cần cấu hình lại file `nginx.conf` để NGINX có thể làm load balancing như sau: 
+
+```
+events {
+
+}
+
+http {
+    log_format upstreamlog '$server_name to: $upstream_addr {$request} '
+    'upstream_response_time $upstream_response_time'
+    ' request_time $request_time';
+
+    upstream backend {
+        server localhost:9000;
+        server localhost:9001;
+    }
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        access_log /var/log/nginx/nginx-access.log upstreamlog;
+
+        location / {
+            proxy_pass "http://backend";
+        }
+    }
+
+    include /etc/nginx/mime.types;
+    include /etc/nginx/conf.d/*.conf;
+}
+```
+
+Trong trường hợp này, hay server ở phía backend tại hai địa chỉ là `localhost:9000` và `localhost:9001` được chỉ định tương ứng ở phần `upstream backend`. Bên cạnh đó, cấu hình trên cũng cấu hình lại log lại phần truy cập vào server NGINX tại port 80 sẽ được phân phối vào server nào để tiện việc kiểm tra. Sau đó ta khởi động lại nginx bằng `sudo systemctl reload nginx` (UNIX). 
+
+Tiếp theo ta start hai server phía backend tại port 9000 của localhost và port 9001 như sau: 
+
+<p align="center">
+    <image src="./assets/start_server_load_balancer.png" 
+        width=100%/> 
+</p>
+
+Cuối cùng ta thử truy cập `localhost` bằng web browser, và kiểm kết quả tại file đã cấu hình như phía trên `/var/log/nginx/nginx-access.log` như sau: 
+
+
+<p align="center">
+    <image src="./assets/log_load_balancer.png" 
+        width=100%/> 
+</p>
+
 
 
 ---------------------------------------
