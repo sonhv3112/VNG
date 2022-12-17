@@ -3,6 +3,8 @@
 Họ và tên: Hồ Văn Sơn \
 Domain: sonhv2 
 
+---------------------------------------
+
 # 0. Basic knowledge 
 
 ## 0.1. Source control
@@ -203,7 +205,6 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 - HTTP 1.0: Có nhiều bước cải tiến so với phiên bản tiền nhiệm trước đó là HTTP 0.9.
     - Header: Cung cấp thêm chi tiết các thông tin cần thiết như: Kiểu dữ liệu mà client chấp nhận, kiểu dữ liệu của content được truyền (content-type), thông tin loại server, user-agent, status code để xác định trạng thái của quá trình thực hiện. 
     - Cung cấp một số phương thức mới ngoài GET còn có HEAD (dùng để hỏi thông tin của một dữ liệu, document; nhanh hơn phương thức GET), POST (đẩy dữ liệu đến server). 
-
 - HTTP 1.1: 
     - Cung cấp một số tính năng mới nhằm tối ưu hiệu năng, tốc độ xử lý như: Persitent, Piplined connection (cho phép thực hiện nhiều request/response trong một connection).
     - Cung cấp chunked transfer encoding, content negotiation, virtual hosting (một server với một địa chỉ IP có thể host nhiều domain khác nhau). 
@@ -276,6 +277,7 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
             }   
             return result; 
         }
+    }
     ```
 - Lợi ích:
     - Mẫu Singleton đảm bảo được rằng chỉ có một instance được tạo ra trong quá trình chương trình thực thi. 
@@ -310,3 +312,68 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 
 ### 0.6.3. Factory Method 
 ### 0.6.4. Abstract Factory 
+
+## Bài tập
+
+---------------------------------------
+
+# 1. Load balancer
+
+## Khái niệm 
+
+- Load balancing được sử dụng trong trường hợp có nhiều server cùng đảm nhiệm vai trò nhận request, lúc này load balancing là một giải pháp được dùng trong việc phân phối các truy cập từ client đến nhiều server.
+- Từ đây, load balancer giúp phần vào việc cải thiện hiệu quả của tính phản hồi, khả dụng của server, cũng như làm giảm trường hợp server bị quá tải. 
+- Load balancer sẽ được đặt giữa client và server, từ đó nó có thể nhận những request từ phía client và điều phối về server thích hợp để xử lý. 
+- Một số thuật toán được sử dụng để load balancing như: 
+    - Dynamic load balancing: Least connection, Weighted least connection, Weighted response time, Resource-based 
+    - Static load balancing: Round robin, Weighted round robin, IP hash. 
+
+## Kiến trúc NGINX
+
+- NGINX sử dụng mô hình để có thể dự đoán việc sử dụng các tiến trình tương ứng với tài nguyên phần cứng được cung cấp. Mô hình sẽ bao gồm: 
+    - Tiến trình `master` thực hiện việc chuyên biệt như đọc cấu hình và liên kết đến các port sau đó tạo một số process con để làm việc (bao gồm 3 loại dưới). 
+    - Tiến trình `cache loader` được chạy lúc khởi động để tải bộ nhớ cache trên đĩa vào vùng nhớ. 
+    - Tiến trình `cache manager` được lập lịch chạy theo định kỳ để loại bỏ một số mục trên cache nhằm đảm bảo đúng với kích thước đã định từ trước. 
+    - Các tiến tình `woker` đảm nhiệm tất cả vai trò, như quản lý kết nối, đọc và ghi từ đĩa hay giao tiếp với upstream server. 
+- Ở NGINX, các tiến trình đều là single-threaded và hoạt động một cách độc lập, nhận kết nối mới và xử lý với chúng. Do đó, các bước xử lý của một request từ phía client đều được thực hiện một cách tuần tự theo một quy trình có trước.
+
+<p align="center">
+    <image src="./assets/state_machine_nginx.png" 
+        height=500/> 
+    </br>
+    State machine: Quy trình xử lý một request của NGINX (Nguồn: 
+    <a href="https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/">
+        NGINX
+    </a>
+    )
+</p>
+
+- NGINX sử dụng kiến trúc Non-blocking "Event-Driven" giúp cho mỗi `woker` có thể xử lý hàng trăm đến hàng nghìn kết nối cùng hoạt động tại một thời điểm, so với các kiến trúc blocking I/O thì mỗi `worker` chỉ có thê xử lý một kết nối hoạt động tại một thời điểm. Cụ thể, mỗi tiến trình sẽ có nhiều `worker connection`, các `worker connection` này đóng vai trò trong việc nhận kết nối, yêu cầu từ phía client và cung cấp đến cho `worker process` của nó để xử lý, các yêu cầu này đều được thực hiện theo một quy trình cho trước như đã mô tả ở trên, tuy nhiên việc thực hiện các yêu cầu sẽ được thực hiện một cách bất đồng bộ do đó tránh việc chặn các sự kiện khác. 
+
+<p align="center">
+    <image src="./assets/blocking.png" 
+        width=400/> 
+    <image src="./assets/non_blocking.png" 
+        width=400/> 
+    </br>
+    Các hoạt động blocking I/O, non-blocking của NGINX  (Nguồn: 
+    <a href="https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/">
+        NGINX
+    </a>
+    )
+</p>
+
+- Bởi NGINX sử dụng kiến trúc non-blocking, event-drivent, cơ chế bất đồng bồ do đó việc sử dụng single-threaded là hợp lý, tránh lãng phí những thread còn lại nếu sử dụng multi-thread, và điều này cũng giúp cho việc tận dụng được hiệu năng của thread để xử lý request. Bên cạnh đó single-threaded khiến cho các request được xử lý theo một quy trình được định sẵn (state machine) như hình ở phần trên, từ đây giúp NGINX có thể dự đoán được thời gian response ổn định hơn và điều phối các request một cách tốt hơn. 
+
+## Bài tập
+
+
+
+---------------------------------------
+
+# 2. Caching
+
+## Vai trò, các thuật toán cho cache
+
+- Caching được dựa trên ý tưởng dữ liệu phân cấp, nó là việc lưu trữ dữ liệu ở một vùng nhớ đặc biệt cho phép truy vấn dữ liệu ở đó mà không cần truy vấn tại nơi gốc chứa dữ liệu đó. Thông thường những dữ liệu thường xuyên được truy cập sẽ được cache lại, ví dụ như trên hệ điều hành thì caching sẽ lưu dữ liệu ở các tầng phân cấp (L1 Cache, L2 Cache, L3 Cache), tầng càng ở trên thì có tốc độ truy vấn càng nhanh nhưng kích thước lưu trữ càng bé. 
+- Vai trò: Mục đích chính của việc caching là tăng tốc độ truy vấn các dữ liệu thường xuyên được truy cập, tùy theo lượng truy vấn đến dữ liệu mà dữ liệu đó sẽ được phân cấp một cách hợp lý để phù hợp với tốc độ truy vấn sau này. 

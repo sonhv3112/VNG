@@ -1,0 +1,10 @@
+[Directory] [4K] D 
+    [Directory] [155K] Folder 1
+    [Directory] [15K] Test Folder
+        [File] [15K] a.cpp 
+        [File] [12K] b.cpp
+    [Directory] [155K] Folder 2
+        [Directory] [155K] Folder 2
+            [File] [122M] Document
+    [Directory] [155K] Folder 3
+    

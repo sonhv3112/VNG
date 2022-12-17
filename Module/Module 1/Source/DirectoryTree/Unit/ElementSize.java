@@ -1,4 +1,4 @@
-package Ex1.Unit;
+package DirectoryTree.Unit;
 
 import java.util.NoSuchElementException;
 
@@ -61,24 +61,24 @@ public class ElementSize {
     private double size; 
     private Type type; 
 
-    ElementSize() { 
+    public ElementSize() { 
         this.size = 0; 
         this.type = Type.B; 
     }
 
-    ElementSize(double size) { 
+    public ElementSize(double size) { 
         this.size = size; 
         this.type = Type.B; 
         this.fix(); 
     }
 
-    ElementSize(double size, Type type) { 
+    public ElementSize(double size, Type type) { 
         this.size = size; 
         this.type = type; 
         this.fix(); 
     }
 
-    ElementSize(ElementSize other) { 
+    public ElementSize(ElementSize other) { 
         this.size = other.size; 
         this.type = other.type; 
     }
@@ -96,6 +96,10 @@ public class ElementSize {
 
     public String toString() { 
         return String.format("%.3f", this.size) + this.type.toString(); 
+    }
+
+    public boolean isEmpty() { 
+        return this.size == 0; 
     }
 
     public static ElementSize parseSize(String str) { 

@@ -1,5 +1,0 @@
-[Directory] [4K] D 
-    [Directory] [155K] Folder 1
-    [Directory] [15T] Son Ho Van 
-        [File] [15K] a.cpp 
-        [File] [12K] b.cpp
