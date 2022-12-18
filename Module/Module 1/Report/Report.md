@@ -370,6 +370,8 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 Đầu tiên ta cần cấu hình lại file `nginx.conf` để NGINX có thể làm load balancing như sau: 
 
 ```
+worker_processes auto;
+
 events {
 
 }
@@ -394,13 +396,17 @@ http {
             proxy_pass "http://backend";
         }
     }
-
-    include /etc/nginx/mime.types;
-    include /etc/nginx/conf.d/*.conf;
 }
 ```
 
-Trong trường hợp này, hay server ở phía backend tại hai địa chỉ là `localhost:9000` và `localhost:9001` được chỉ định tương ứng ở phần `upstream backend`. Bên cạnh đó, cấu hình trên cũng cấu hình lại log lại phần truy cập vào server NGINX tại port 80 sẽ được phân phối vào server nào để tiện việc kiểm tra. Sau đó ta khởi động lại nginx bằng `sudo systemctl reload nginx` (UNIX). 
+Trong trường hợp này, hay server ở phía backend tại hai địa chỉ là `localhost:9000` và `localhost:9001` được chỉ định tương ứng ở phần `upstream backend`. Bên cạnh đó, cấu hình trên cũng cấu hình lại log lại phần truy cập vào server NGINX tại port 80 sẽ được phân phối vào server nào để tiện việc kiểm tra. Sau đó ta khởi động lại nginx bằng `sudo systemctl reload nginx` (UNIX). Theo cấu hình trên số worker process sẽ được cấu hình tự động và ở đây ta có là 8 worker processes. 
+
+
+<p align="center">
+    <image src="./assets/load_balancer_workprocesses.png" 
+        width=100%/> 
+</p>
+
 
 Tiếp theo ta start hai server phía backend tại port 9000 của localhost và port 9001 như sau: 
 
@@ -427,3 +433,40 @@ Cuối cùng ta thử truy cập `localhost` bằng web browser, và kiểm kế
 
 - Caching được dựa trên ý tưởng dữ liệu phân cấp, nó là việc lưu trữ dữ liệu ở một vùng nhớ đặc biệt cho phép truy vấn dữ liệu ở đó mà không cần truy vấn tại nơi gốc chứa dữ liệu đó. Thông thường những dữ liệu thường xuyên được truy cập sẽ được cache lại, ví dụ như trên hệ điều hành thì caching sẽ lưu dữ liệu ở các tầng phân cấp (L1 Cache, L2 Cache, L3 Cache), tầng càng ở trên thì có tốc độ truy vấn càng nhanh nhưng kích thước lưu trữ càng bé. 
 - Vai trò: Mục đích chính của việc caching là tăng tốc độ truy vấn các dữ liệu thường xuyên được truy cập, tùy theo lượng truy vấn đến dữ liệu mà dữ liệu đó sẽ được phân cấp một cách hợp lý để phù hợp với tốc độ truy vấn sau này. 
+
+## Bài tập 
+
+```                                                                        
+worker_processes auto;
+
+events {
+
+}
+
+http {
+        log_format upstreamlog '$server_name to: $upstream_addr {$request} '
+        'upstream_response_time $upstream_response_time'
+        ' request_time $request_time';
+
+        upstream backend {
+                server localhost:9000;
+                server localhost:9001;
+        }
+
+        server {
+                listen 80;
+                server_name localhost;
+                access_log /var/log/nginx/nginx-access.log upstreamlog;
+
+                location / {
+                        proxy_pass "http://backend";
+                }
+
+                location /images/ {
+                        root /http;
+                        expires 30d;
+                }
+        }
+
+}
+```
