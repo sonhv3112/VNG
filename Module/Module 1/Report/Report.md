@@ -10,33 +10,50 @@ Domain: sonhv2
 ## 0.1. Source control
  
 - SVN 
-
+    - Subversion là một phần mềm mã nguồn mở dùng để quản lý và kiểm tra các phiên bản mã nguồn khác nhau trong quá trình phát triển phần mềm. Subversion cũng còn được gọi là SVN. SVN là lệnh dùng để thực hiện các chức năng Subversion trong môi trường thi hành lệnh trên các máy vi tính.
+    - Tính năng mà SVN cung cấp: 
+        - Subversion là kiểu kho lưu trữ trung tâm (khác với kho lưu trữ phân tán). 
+        - Cung cấp các tính năng cần thiết để nhiều người/nhiều thiết bị có thể cùng tham gia phát triển/chỉnh sửa  nội dung một cách an toàn, đơn giản và nhanh chóng. 
+        - Quản lý, lưu trữ thư mục và tập tin với đầy đủ các lịch sử sửa đổi trên hệ thống (user tham gia, thêm, sửa đổi những tập tin, thư mục nào, như thế nào, ...). 
+        - Lưu lại các version để có thể roll back version cũ bất cứ lúc nào cần.  
+        - Cho phép khóa một số tệp để không bị merge.
+        - ...
 - Git 
+    - Git là một hệ thống quản lý mã nguồn phân tán cho phép theo dõi sự thay đổi của bất kì tập file/folder nào. Git cung cấp cho người dùng một giải pháp đơn giản để theo dõi các version của project (sự thay đổi, cập nhật) để nhiều người dùng có thể dễ dàng làm việc với project hơn. 
+    - Một số lệnh thường thấy khi sử dụng Git: 
+        - `git init`: Tạo một Git repository trên thư mục hiện tại ở máy local. 
+        - `git clone <repository url>`: Tải về version cuối cùng của một repository xuống máy local, có thể thêm option `-b` để xác định rõ branch muốn tải xuống. 
+        - `git fetch`: Kiểm tra các cập nhật tại repository so với phiên bản tại local. 
+        - `git checkout`: Chuyển đổi làm việc giữa các branch trên máy local, hoặc tạo branch mới với option `-b`. 
+        - `git add <file path>`: Thêm, chỉnh sửa các file vào local repo nằm trong đường dẫn tương ứng.
+        - `git commit -m "<message>"`: Ghi lại các thay đổi hiện tại so với các file trong repository trước đó. Mỗi commit sẽ có một mã hash SHA1 tương ứng để theo dõi sự thay đổi tương ứng với mỗi lần commit. 
+        - `git push`: Cập nhật những thay đổi từ máy local đến remote branch. 
+        - `git diff`: Kiểm tra những sự thay đổi mới trên nhánh hiện tại chưa được thực hiện. 
+        - `git merge`: Kết hợp các nhánh lại với nhau
+        - `git pull`: Hợp nhất remote repo với local, gần như tương đương với lệnh fetch và merge. 
+        - ...
 
 ## 0.2. Linux shell/bash script: 
 
 - **ssh**
     - Mô tả: Viết tắt của "Secure Shell" hay "Secure Socket Shell", cho phép người dùng/client truy cập, điều khiển từ xa máy tính/server khác cho mục đích thực hiện các lệnh một cách an toàn. 
     - Cú pháp: `ssh [OPTION]... [user@]host[:port]`
-    - Các `OPTION` phổ biến: 
-        - a
-    - ssh dựa trên kiến trúc client-server, và nó đảm bảo tính an toàn bảo mật khi trao đổi thông tin giữa client và host bằng việc authentication đầu tiên (nếu cần) và các thông tin trao đổi sẽ được mã hóa thông qua một số phương pháp mã hóa như:   
-        - Symmetrical encryption: ...
-        - Asymmetrical encrption: ...
-        - Hashing: ...
+    <!-- - Các `OPTION` phổ biến: 
+        - a -->
+    - ssh dựa trên kiến trúc client-server, và nó đảm bảo tính an toàn bảo mật khi trao đổi thông tin giữa client và host bằng việc authentication đầu tiên (nếu cần) và các thông tin trao đổi sẽ được mã hóa thông qua một số phương pháp mã hóa như: Symmetrical encryption, Asymmetrical encrption, Hashing,...
 - **scp** 
     - Mô tả: Sao chép file giữa các host thông qua internet. scp sử dụng ssh để trao đổi các file do đó nó bước authentication và các phương thức bảo mật đều tương tự với ssh.
     - Cú pháp: `scp [OPTION]... source target`. Trong đó: `source` và `target` đều phải chỉ ra một file cụ thể của host tương ứng, có dạng `[user@]source_host[:port][/path]`.
-    - Các `OPTION` phổ biến: 
-        - a
+    <!-- - Các `OPTION` phổ biến: 
+        - a -->
 - **mv** 
     - Mô tả: Di chuyển hoặc đổi tên file tại máy local. 
     - Cú pháp: 
         - `mv [OPTION]... [-T] SOURCE DEST`: di chuyển file `SOURCE` sang `DEST`, nếu `SOURCE` và `DEST` nằm cùng một thư mục thì tương ứng thao tác đổi tên. 
         - `mv [OPTION]... SOURCE... DIRECTORY` hoặc \
         `mv [OPTION]... [-t] DIRECTORY SOURCE`: di chuyển các file `SOURCE` vào thư mục `DIRECTORY`, nếu các file `SOURCE` nằm cùng một thư mục `DIRECTORY` thì tương ứng thao tác đổi tên các file đấy. 
-    - Các `OPTION` phổ biến: 
-        - a
+    <!-- - Các `OPTION` phổ biến: 
+        - a -->
 - **rm** 
     - Mô tả: Xóa file hoặc thư mục.  
     - Cú pháp: `rm [OPTION]... [FILE]...`. 
@@ -49,13 +66,13 @@ Domain: sonhv2
         - `cp [OPTION]... [-T] SOURCE DEST`: sao chép file `SOURCE` sang `DEST`. 
         - `cp [OPTION]... SOURCE... DIRECTORY` hoặc \
         `cp [OPTION]... [-t] DIRECTORY SOURCE`: sao chép các file `SOURCE` vào thư mục `DIRECTORY`.
-    - Các `OPTION` phổ biến: 
-        - a
+    <!-- - Các `OPTION` phổ biến: 
+        - a -->
 - **telnet**
-    - Mô tả: 
-    - Cú pháp: ``
-    - Các `OPTION` phổ biến: 
-        - a 
+    - Mô tả: Giúp giao tiếp với host khác thông qua giao thức TELNET.
+    - Cú pháp: `telnet <host>`
+    <!-- - Các `OPTION` phổ biến: 
+        - a  -->
 - **netstat**
     - Mô tả: Liệt kê danh sách các kết nối TCP/IP tĩnh hoặc hiện tại đang chạy.
     - Cú pháp: `netstat` 
@@ -65,7 +82,8 @@ Domain: sonhv2
     - Mô tả: Gửi tín hiệu đến một process. 
     - Cú pháp: `kill` 
     - Các `OPTION` phổ biến: 
-        - a
+        - `-l`: Liệt kê các tín hiệu có thể truyền đến một process có thể sử dụng. 
+    - Thông thường để kill một process thông qua pid (port) thì ta sử dụng lệnh: `kill -9 pid` hoặc `killall -9 appname` đối với tên của process đấy. Ở đây option -9 tương ứng với tín hiệu SIGKILL.
 
 ## 0.3. OOP 
 
@@ -311,9 +329,81 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 - Khó khăn trong việc khái quát hóa lớp `Component` bởi nó cần khái quát được tất cả các đối tượng của mô hình, bao gồm cả các lớp đơn giản đến phức tạp.
 
 ### 0.6.3. Factory Method 
+
+- `Factory Method` cung cấp một interface mô tả các đối tượng có khả năng sinh ra các đối tượng product một cách cụ thể, hay nói cách khác nó giúp tạo ra một đối tượng mà không cần thiết chỉ ra rằng chính xác lớp nào được tạo ra từ lớp nào. 
+
+<p align="center">
+    <image src="./assets/factory_method.png" 
+        width=80%/> 
+    </br>
+    Cấu trúc của Factory Method (Nguồn: 
+    <a href="https://refactoring.guru/design-patterns/composite">
+        Refactoring Guru
+    </a>
+    )
+</p>
+
+- Mô tả: 
+    - `Product` cung cấp interface cho các đối tượng `ConcreteProduct` sẽ được `Factory` tạo ra.
+    - `Creator` (thường là interface hoặc abstract class) cung cấp phương thức để tạo ra các đối tượng `Product`. 
+    - Lớp `ConcreteCreator` là các lớp kế thừa `Creator` cung cấp các phương thức để tạo ra các đối tượng `Product` cụ thể.
+- Lợi ích: 
+    - Xóa bỏ được sự ràng buộc giữa một creator và các product. 
+    - Đảm bảo tính Single Responsibility Principle, bởi một creator thường chỉ tạo ra một loại `Product` cụ thể. 
+    - Đảm bảo tính Open/Closed Principle, với việc có thể mở rộng thêm các loại `Product` khác mà không cần phá vỡ cấu trúc cũ. 
+- Khó khăn: Việc cài đặt trở nên phức tạp bởi chia nhiều lớp con tương ứng với từng loại `Product`. 
+
 ### 0.6.4. Abstract Factory 
 
-## Bài tập
+- `Abstract Factory` cung cấp giải pháp để đóng gói một nhóm các "nhà máy" cụ thể có điểm chung mà không cần chỉ ra `Product` cụ thể mà nó tạo ra.
+
+<p align="center">
+    <image src="./assets/abstract_factory.png" 
+        width=80%/> 
+    </br>
+    Cấu trúc của Factory Method (Nguồn: 
+    <a href="https://refactoring.guru/design-patterns/composite">
+        Refactoring Guru
+    </a>
+    )
+</p>
+
+- Mô tả: 
+    - `Abstract Product`: Mô tả các interface cho tập các product khác nhau nhưng có điểm chung. 
+    - `Concrete Product`: Các đối tượng product cụ thể kế thừa từ `Abstract Product`. 
+    - `Abstract Factory`: Cung cấp interface các "nhà máy" chứa các phương thức để tạo ra các abstract product. 
+    - `Concrete Factory`: Các "nhà máy" cụ thể kế thừa từ `Abstract Factory` cung cấp các phương thức tạo ra các product (`Concrete Product`) tương ứng. 
+- Lợi ích: 
+    - Xóa bỏ được sự ràng buộc giữa một creator và các product. 
+    - Đảm bảo tính Single Responsibility Principle, Open/Closed Principle. 
+- Khó khăn: Việc cài đặt trở nên phức tạp bởi chia nhiều lớp con. 
+
+## Bài tập Directory tree
+
+### Class diagram
+
+<p align="center">
+    <image src="./assets/DirectoryTreeClassDiagram.png" 
+        width=100%/> 
+    </br>
+    Class diagram của bài làm
+</p>
+
+### Mô tả: 
+
+- Được cài đặt dựa trên pattern `Composite` và bên cạnh đó cũng sử dụng `Simple Factory` (không phải pattern).
+- Lớp `ElementSize` mô tả kích thước một file/folder, bên trong có chứa enum `ElementSize.Type` gồm các kích thước cụ thể như B (Byte), K (Kilobytes), M (Megabytes), ... Lớp `ElementSize` cung cấp một số phương thức như cộng hai size, chuyển đổi đơn vị của size, parse `ElementSize` từ string, ...
+- Lớp `AbstractElement` là một `Component` mô tả một đối tượng có thể có trong pattern `Composite`, và các lớp `DirectoryElement` (folder), `FileElement` (file) kế thừa từ lớp này. Các đối tượng trên cây phải cung cấp các phương thức như tính tổng kích thước của một file/folder, tìm kiếm file/folder trong folder (cây con với gốc chính đối tượng đó), thêm file/folder vào thư mục hiện tại, ...
+- Lớp `ElementFactory` là một Simple factory để tạo ra các đối tượng file/folder tương ứng với tham số truyền vào.
+- Lớp `DirectoryTreeParser` cho mục đích parse directory tree từ string hoặc từ file và trả về gốc của cây. 
+
+### Biên dịch và chạy
+
+- File Makefile được cung cấp nhằm mục đích sử dụng make để biên dịch và chạy project. Makefile cung cấp một số lệnh sau: 
+    - `make build`: Biên dịch tất cả file mã nguồn có trong project vào thư mục Target. 
+    - `make run`: Chạy chương trình từ Target. 
+    - `make clean`: Xóa các file trong Target. 
+    - `make`: Biên dịch, sau đó chạy chương trình.
 
 ---------------------------------------
 
@@ -367,7 +457,17 @@ HTTP (Hypertext Transfer Protocol) là một giao thức tại tầng applicatio
 
 ## Bài tập
 
-Đầu tiên ta cần cấu hình lại file `nginx.conf` để NGINX có thể làm load balancing như sau: 
+### Cấu hình HTTP Server bằng Java 
+
+- Sử dụng Maven repository `com.sun.net.httpserver` để cài đặt một HTTP Server đơn giản bằng Java. 
+- Makefile cấu hình một số lệnh chạy đơn giản để build project và chạy server. Để sử dụng, lệnh `make` và `mvn` cần khả dụng trên môi trường muốn chạy:
+    - `make build`: Sync maven, compile project. 
+    - `make run PORT=<port>`: Chạy server với PORT tại `<port>`, mặc định là 9000. 
+    - `make clean`: Xóa project.
+
+### Cấu hình NGINX Load balancing
+
+- Đầu tiên ta cần cấu hình lại file `nginx.conf` để NGINX có thể làm load balancing như sau: 
 
 ```
 worker_processes auto;
@@ -399,7 +499,7 @@ http {
 }
 ```
 
-Trong trường hợp này, hay server ở phía backend tại hai địa chỉ là `localhost:9000` và `localhost:9001` được chỉ định tương ứng ở phần `upstream backend`. Bên cạnh đó, cấu hình trên cũng cấu hình lại log lại phần truy cập vào server NGINX tại port 80 sẽ được phân phối vào server nào để tiện việc kiểm tra. Sau đó ta khởi động lại nginx bằng `sudo systemctl reload nginx` (UNIX). Theo cấu hình trên số worker process sẽ được cấu hình tự động và ở đây ta có là 8 worker processes. 
+- Trong trường hợp này, hay server ở phía backend tại hai địa chỉ là `localhost:9000` và `localhost:9001` được chỉ định tương ứng ở phần `upstream backend`. Bên cạnh đó, cấu hình trên cũng cấu hình lại log lại phần truy cập vào server NGINX tại port 80 sẽ được phân phối vào server nào để tiện việc kiểm tra. Sau đó ta khởi động lại nginx bằng `sudo systemctl reload nginx` (UNIX). Theo cấu hình trên số worker process sẽ được cấu hình tự động và ở đây ta có là 8 worker processes. 
 
 
 <p align="center">
@@ -408,14 +508,14 @@ Trong trường hợp này, hay server ở phía backend tại hai địa chỉ 
 </p>
 
 
-Tiếp theo ta start hai server phía backend tại port 9000 của localhost và port 9001 như sau: 
+- Tiếp theo ta start hai server phía backend tại port 9000 của localhost và port 9001 như sau: 
 
 <p align="center">
     <image src="./assets/start_server_load_balancer.png" 
         width=100%/> 
 </p>
 
-Cuối cùng ta thử truy cập `localhost` bằng web browser, và kiểm kết quả tại file đã cấu hình như phía trên `/var/log/nginx/nginx-access.log` như sau: 
+- Cuối cùng ta thử truy cập `localhost` bằng web browser, và kiểm kết quả tại file đã cấu hình như phía trên `/var/log/nginx/nginx-access.log` như sau: 
 
 
 <p align="center">
@@ -423,20 +523,62 @@ Cuối cùng ta thử truy cập `localhost` bằng web browser, và kiểm kế
         width=100%/> 
 </p>
 
-
-
 ---------------------------------------
 
 # 2. Caching
 
-## Vai trò, các thuật toán cho cache
+## Vai trò
 
 - Caching được dựa trên ý tưởng dữ liệu phân cấp, nó là việc lưu trữ dữ liệu ở một vùng nhớ đặc biệt cho phép truy vấn dữ liệu ở đó mà không cần truy vấn tại nơi gốc chứa dữ liệu đó. Thông thường những dữ liệu thường xuyên được truy cập sẽ được cache lại, ví dụ như trên hệ điều hành thì caching sẽ lưu dữ liệu ở các tầng phân cấp (L1 Cache, L2 Cache, L3 Cache), tầng càng ở trên thì có tốc độ truy vấn càng nhanh nhưng kích thước lưu trữ càng bé. 
 - Vai trò: Mục đích chính của việc caching là tăng tốc độ truy vấn các dữ liệu thường xuyên được truy cập, tùy theo lượng truy vấn đến dữ liệu mà dữ liệu đó sẽ được phân cấp một cách hợp lý để phù hợp với tốc độ truy vấn sau này. 
 
+## Thuật toán LRU 
+
+- Ý tưởng: Thuật toán LRU (Least Recently Used) Cache tổ chức các phần tử được cache theo thứ tự được truy xuất của chúng, điều này giúp xác định được phần tử nào đã được truy cập gần đây hoặc chưa được truy cập trong một thời gian dài trước đó. Từ đây, chiến thuật thay thế khi cache đầy của LRU là các phần tử được truy cập gần đây sẽ có khả năng truy cập trong tương lai gần nhiều hơn các phần tử không được truy cập trong một thời gian dài, do đó nó sẽ thay thế vào phần tử có thời gian chưa được tham chiếu đến lâu nhất trong cache. 
+- Cài đặt: Thông thường thuật toán LRU Cache được cài đặt với hai cấu trúc dữ liệu để lưu trữ là: 
+    - Doubly Linked List: Danh sách lưu trữ các phần tử trong cache. 
+    - Hash map: Map ánh xạ giá trị các phần tử trong cache thành node tương ứng trong Doubly Linked List. 
+    - Khi thực hiện thao tác truy vấn một phần tử: 
+        - Nếu phần tử đó có sẵn trong Cache (kiểm tra bằng Hash map), ta sử dụng Hash map để tìm ra node tương ứng trên List và di chuyển nó đến cuối List (giá sử phần tử cuối cùng của danh sách là phần tử được truy cập gần đây đây, và giảm dần khi trở về ngược đầu danh sách).
+        - Nếu phần tử chưa có sẵn trong Cache, ta xóa phần tử đầu tiên của List và giá trị trên Hash map tương ứng, sau đó thêm phần tử vào Cache ở cuối List và ánh xạ tương ứng trên Hash map. 
+- Việc cài đặt bằng hai cấu trúc dữ liệu trên đảm bảo được tốc độ của các thao tác trên Cache như truy vấn phần tử trên Cache trong $O(1)$, loại bỏ phần tử không được sử dụng trong thời gian dài nhất trong $O(1)$ mà độ phức tạp về bộ nhớ vẫn là $O(n)$. Tuy nhiên ta có thể thấy được việc cài đặt bằng Hash map cũng đưa ra một số điểm bất lợi về độ phức tạp thời gian khi ta không thể đảm bảo rằng mọi truy vấn trên Hash map đạt được độ phức tạp thời gian trung bình là $O(1)$. 
+
+## Thuật toán LFU 
+
+- Ý tưởng: Thuật toán LFU (Least Frequently Used) Cache tổ chức các phần tử được cache và theo dõi theo số lần được truy xuất của chúng. Do đó chiến thuật thay thế khi cache đầy của LFU là thay thế ở phần tử có số lần truy xuất ít nhất trong Cache, nếu có nhiều phần tử có cùng số lần truy xuất thì sẽ thay thế phần tử chưa được truy xuất trong thời gian dài nhất (tương tự LRU). 
+- Cài đặt: Thông thường thuật toán LFU được cài đặt với hai cấu trúc dữ liệu để lưu trữ là: 
+    - Min-heap: Lưu trữ các phần tử trong cache theo số lần được truy xuất của chúng. 
+    - Hash map: Map ánh xạ giá trị các phần tử trong cache thành node trên min-heap tương ứng. 
+    - Khi thực hiện thao tác truy vấn một phần tử: 
+        - Nếu phần tử đó có sẵn trong Cache (kiểm tra bằng Hash map), tăng số lần truy xuất của phần tử đó lên, sử dụng Hash map để tìm ra node tương ứng trên min-heap và thực hiện việc thao tác cập nhật lại subtree trên min-heap với gốc là node vừa được truy xuất đến. 
+        - Nếu phần tử đó không có sẵn trong Cache, ta xóa phần tử đầu tiên của min-heap và thay thế bằng phần tử mới này, sau đó cập nhật lại min-heap.
+- Việc cài đặt như trên đảm bảo các thao tác trên Cache tốn $O(log(n))$, tuy nhiên đối với thao tác khi phần tử không có sẵn trong Cache thì phần tử thêm mới vào sẽ có số lần truy cập bé nhất nên thao tác sẽ thường tốn $O(1)$.
+
+## Cách hoạt động của caffein
+
+- Caffein sử dụng `Window TinyLFU` để cài đặt cho chiến lược thay thế, nó cho được hiệu năng cao, tỷ lệ truy cập (HIT) cao và dung lượng bộ nhớ thấp. Cụ thể như sau: 
+    - `W-TinyLFU` sử dụng một vùng nhớ nhỏ `LRU` để lưu các phần tử mới vừa được Cache (theo cơ chế tương tự LRU Cache). Khi các phần tử nằm trong vùng `Window Cache` này bị thay thế, nó sẽ được chuyển vào `TinyLFU` để kiểm tra đạt chuẩn bằng một thuật toán từ trước, nếu đạt chuẩn nó sẽ được chuyển sang `Main Cache`. Tại đây cache được chia thành hai vùng protected (thông thường là 80%) và probation, các phần tử mới được thêm vào vùng protected và nó sẽ đảm bảo rằng không bị thay thế ngay. Khi vùng nhớ protected đầy, một số phần tử sẽ được chuyển sang vùng nhớ probation và từ đây một số phần tử probation sẽ được loại ra và chuyển vào `TinyLFU` để tính toán. Việc làm trên sẽ lặp lại cho đến khi `Main Cache` trở lại với bộ nhớ tối đa mặc định.
+
+    <p align="center">
+        <image src="./assets/WTinyLFU.png" 
+            width=90%/> 
+        </br>
+        Kiến trúc của Window TinyLFU 
+        </br>
+        (Nguồn: 
+        <a href="https://www.researchgate.net/publication/351709350_Lightweight_Robust_Size_Aware_Cache_Management">
+            Lightweight Robust Size Aware Cache Management
+        </a>
+        )
+    </p>
+
+    - `TinyLFU` sử dụng bảng phác thảo tần suất để có thể ước tính xác suất truy xuất là [CountMin Sketch](http://dimacs.rutgers.edu/~graham/pubs/papers/cmsoft.pdf). Phần cài đặt sử dụng [4-bit CountMinSketch](https://github.com/ben-manes/caffeine/blob/master/caffeine/src/main/java/com/github/benmanes/caffeine/cache/FrequencySketch.java).
+
 ## Bài tập 
 
-```                                                                        
+- Ở bài này sử dụng lại file cấu hình NGINX ở bài tập trước, nhưng thêm phần static resources ở thư mục `/http/images`. Tại thư mục này, chứa file `image.png` để trang web có thể get mỗi khi được load lên từ trình duyệt web. Để static resources được cache lại, thêm cấu hình `expires <time>`, ví dụ như file cấu hình bên dưới là 30 ngày.
+
+```            
 worker_processes auto;
 
 events {
@@ -470,3 +612,27 @@ http {
 
 }
 ```
+
+- Dưới đây là hình minh họa cho trước và sau khi bật cache cho static resources.
+
+<p align="center">
+    <image src="./assets/caching_1.png" 
+        width=100%/> 
+    </br>
+    Trước khi bật cache
+</p>
+
+<p align="center">
+    <image src="./assets/caching_2.png" 
+        width=100%/> 
+    </br>
+    Sau khi bật cache
+</p>
+
+- Ngoài ra cũng NGINX cũng cung cấp directive để cấu hình cache đơn giản là: `proxy_cache_path` và `proxy_cache`, trong đó: 
+    - **proxy_cache_path**: Cấu hình đường dẫn cho folder cache và một số cấu hình khác của cache như: 
+        - levels: Cấu trúc phân cấp, ví dụ như two-level thì sẽ là `levels=1:2`
+        - key_zones: Tên và kích thước của `shared memory` cho phép để chứa các metadata về các dữ liệu đã được cache. Ví dụ `key_zones=my_cache:10m` thì tên của vùng shared memory sẽ là my_cache và kích thước của nó là 10MB. 
+        - max_size: Kích thước tối đa của Cache. 
+        - inactive: Thời lượng tối đa mà một phần tử có thể tồn tại ở trong Cache tính từ thời điểm truy cập lần cuối.
+    - **proxy_cache**: Được thêm vào với `keys_zone` tương ứng với **proxy_cache_path** để kích hoạt cache.

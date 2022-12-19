@@ -10,14 +10,14 @@ public abstract class AbstractElement {
     protected String path, name; 
     protected ElementSize size;
 
-    AbstractElement(String name, ElementSize size) { 
+    protected AbstractElement(String name, ElementSize size) { 
         this.parent = null; 
         this.name = name; 
         this.size = size; 
         this.setPath();
     }
 
-    AbstractElement(String name, String size) { 
+    protected AbstractElement(String name, String size) { 
         this.parent = null; 
         this.name = name; 
         this.size = ElementSize.parseSize(size); 
