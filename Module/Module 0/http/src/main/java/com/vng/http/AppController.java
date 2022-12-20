@@ -1,40 +1,34 @@
 package com.vng.http;
 
-import java.security.NoSuchAlgorithmException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AppController {
 
-    @Autowired
-    private UserRepository userRepo;
+	@Autowired
+	private AppService appService;
 
-	@RequestMapping(path = "/login/{username}/{password}", method = RequestMethod.GET)
-	public String login(@PathVariable String username, @PathVariable String password) {
-		User user = userRepo.findByUsername(username);
-		if (user == null) {
-			return "fail";
-		}
-		if (user.authenticate(password)) {
-			return "success";
-		}
-		return "fail";
+	@RequestMapping(path = "/login", method = RequestMethod.GET)
+	public String login(@RequestBody LoginForm loginForm) {
+		String username = loginForm.getUsername();
+		String password = loginForm.getPassword();
+
+		return appService.login(username, password);
 	}
 
-	@RequestMapping(path = "/register/{username}/{password}", method = RequestMethod.GET)
-	public String register(@PathVariable String username, @PathVariable String password) {
-		User user = userRepo.findByUsername(username);
-		if (user == null) {
-			try {
-				password = Utils.toHexString(Utils.getSHA(password));
-			} catch (NoSuchAlgorithmException e) {
-				System.out.println("Exception thrown for incorrect algorithm: " + e);
-			}
-			userRepo.save(new User(username, password));
-			return "success to register";
-		}
-		return "fail to register";
+	@RequestMapping(path = "/register", method = RequestMethod.GET)
+	public String register(@RequestBody RegisterForm registerForm) {
+		String 	username = registerForm.getUsername(),
+				password = registerForm.getPassword(),
+				email = registerForm.getEmail(),
+				fullname = registerForm.getFullname();
+
+		return appService.register(username, password, email, fullname);
+	}
+
+	@RequestMapping(path = "/filter", method = RequestMethod.GET)
+	public String searchByEmail(@RequestParam String email) {
+		return appService.searchUserByEmailManual(email).toString();
 	}
 }
