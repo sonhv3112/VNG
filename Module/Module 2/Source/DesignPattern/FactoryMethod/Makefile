@@ -4,16 +4,13 @@ JVM= java
 RM = rm
 TARGET_DIR = Target
 
-PACKAGE_NAME = DirectoryTree
+PACKAGE_NAME = FactoryMethod
 MAIN_FILE = Main
 
 
 FILES = \
 	$(MAIN_FILE).java \
-	Factory/*.java \
-	Parser/*.java \
-	Unit/*.java \
-	TypeComposite/*.java
+	./*.java 
 
 all: 
 	$(JC) -d $(TARGET_DIR) -classpath -sourcepath $(FILES) && \
