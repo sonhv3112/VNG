@@ -156,3 +156,34 @@ sortArray() {
 # Example: sortArray 5 2 4 1 3
 ```
 
+## Docker 
+
+### Grab Ubuntu Image 
+
+```sh
+sudo docker pull ubuntu:20.04
+```
+
+### Start an instance of Ubuntu 
+
+```sh
+sudo docker run -it ubuntu
+```
+
+### SSH into the instance & install a simple static web. The web must be accessible from the host
+
+### `Advanced`: Write a `Dockerfile` automating the whole process above. So to have the web started, we just need to invoke following commands:
+
+- Dockerfile 
+
+```sh
+FROM nginx
+COPY . /usr/share/nginx/html
+```
+
+- Run docker
+
+```sh
+sudo docker build -t ubuntu .
+sudo docker run -it -d -p 8080:80 ubuntu
+```
