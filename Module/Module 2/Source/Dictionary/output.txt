@@ -1,0 +1,20 @@
+Building Bloom Filter Dictionary...
+[+] Build dictionary from file a.csv successful in 1645ms
+Enter your word, or "-1" to exit: 
+[!] Find "SONho" in dictionary: No
+[!] Processing time: 7ms
+
+Enter your word, or "-1" to exit: 
+[!] Find "van" in dictionary: Yes
+[!] Processing time: 0ms
+
+Enter your word, or "-1" to exit: 
+[!] Find "vanilla" in dictionary: Yes
+[!] Processing time: 0ms
+
+Enter your word, or "-1" to exit: 
+[!] Find "car" in dictionary: Yes
+[!] Processing time: 0ms
+
+Enter your word, or "-1" to exit: 
+[!] Total time excution: 1686ms

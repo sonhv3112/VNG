@@ -7,7 +7,6 @@ TARGET_DIR = Target
 PACKAGE_NAME = FactoryMethod
 MAIN_FILE = Main
 
-
 FILES = \
 	$(MAIN_FILE).java \
 	./*.java 
@@ -23,4 +22,4 @@ run:
 	$(JVM) -cp $(TARGET_DIR) $(PACKAGE_NAME).$(MAIN_FILE)
 
 clean:
-	$(RM) -r $(TARGET_DIR)/* 
+	$(RM) -rf $(TARGET_DIR)/ 

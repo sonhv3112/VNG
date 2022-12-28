@@ -1,0 +1,11 @@
+module2/dictionary/Dictionary/TrieDictionary.class
+module2/dictionary/Dictionary/SimpleDictionary$Type.class
+module2/dictionary/Dictionary/SimpleDictionary.class
+module2/dictionary/Trie/Trie.class
+module2/dictionary/Utils/Utils.class
+module2/dictionary/Dictionary/HashDictionary.class
+module2/dictionary/Main.class
+module2/dictionary/Utils/Tokenizer.class
+module2/dictionary/Dictionary/BloomFilterDictionary.class
+module2/dictionary/Dictionary/Dictionary.class
+module2/dictionary/Trie/TrieNode.class

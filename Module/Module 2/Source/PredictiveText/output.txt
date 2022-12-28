@@ -1,0 +1,45 @@
+Find "SONho" in dictionary: No
+Top 10 word in dictionary nearest your word:
+
+Find "van" in dictionary: Yes
+Top 10 word in dictionary nearest your word:
+van
+vance
+vantage
+vanish
+vanity
+vanilla
+
+Find "vanilla" in dictionary: Yes
+Top 10 word in dictionary nearest your word:
+vanilla
+
+Find "son" in dictionary: Yes
+Top 10 word in dictionary nearest your word:
+son
+sons
+song
+songs
+songwriter
+sony
+sonic
+
+Find "201" in dictionary: No
+Top 10 word in dictionary nearest your word:
+2012
+2012853
+
+Find "20" in dictionary: Yes
+Top 10 word in dictionary nearest your word:
+20
+200
+2000
+2001
+2002
+2003
+2004
+2005
+2006
+20pm
+
+Total time excution: 363ms
