@@ -5,7 +5,7 @@ DICT = a.csv
 DICT_TYPE = triedictionary
 
 all: 
-	@mvn package && java -cp $(JAR) $(MAIN) $(DICT) $(DICT_TYPE)
+	@mvn clean compile assembly:single && java -cp $(JAR) $(MAIN) $(DICT) $(DICT_TYPE)
 
 build: 
 	@mvn clean compile assembly:single
