@@ -98,6 +98,29 @@ public class ProductB implements Product {
 }
 ```
 
+**Abstract Factory**
+
+- `Abstract Factory` cung cấp giải pháp để đóng gói một nhóm các "nhà máy" cụ thể có điểm chung mà không cần chỉ ra `Product` cụ thể mà nó tạo ra. Code minh họa cài đặt các "nhà máy" để  tạo ra các loại checkbox hoặc nút nhấn (giả định bằng cách chỉ in ra màn hình thông báo) trên Window và MacOS, phần mã nguồn được đặt tại `Source/DesignPattern/AbstractFactory`. 
+
+**Builder**
+
+- `Builder` là một design pattern cho phép ta tạo ra object từng bước bằng cách xây dựng từng phần của object đấy. Pattern này cho phép ta tạo ra các kiểu, hình khác nhau cùng một loại object.
+
+<p align="center">
+    <image src="./assets/structure.png" 
+        width=80%/> 
+    </br>
+    Cấu trúc của Builder (Nguồn: 
+    <a href="https://refactoring.guru/design-patterns/builder">
+        Refactoring Guru
+    </a>
+    )
+</p>
+
+- Phần code minh họa dưới đây 
+
+**Dependency Injection**
+
 ### 2.1.b. Thế nào là clean code? Nêu các ví dụ để clean code.
 
 - Clean code là viết mã nguồn một cách có tổ chức, dễ đọc, dễ hiểu và dễ để duy trì, nâng cấp cho sau này. Đây là một điều quan trọng để việc làm việc nhóm trở nên dễ dàng hơn. Clean code có thể theo một số chuẩn hay quy ước nào đó, giúp cho người khác có thể dễ hiểu, dễ đoán được ý nghĩa của đoạn mã nguồn mà mình viết. 

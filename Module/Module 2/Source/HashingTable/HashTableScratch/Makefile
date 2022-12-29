@@ -4,7 +4,7 @@ JVM= java
 RM = rm
 TARGET_DIR = Target
 
-PACKAGE_NAME = HTScratch
+PACKAGE_NAME = HashTableScratch
 MAIN_FILE = Main
 
 FILES = \

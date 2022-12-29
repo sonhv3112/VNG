@@ -1,4 +1,4 @@
-package HTScratch; 
+package HashTableScratch; 
 
 public class PrimeUtils { 
     public static boolean isPrime(int x) { 

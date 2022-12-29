@@ -1,4 +1,4 @@
-package HTScratch;
+package HashTableScratch;
 
 public class HashTable {
     private static final int INITIAL_BASE = 617; 

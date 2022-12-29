@@ -1,4 +1,4 @@
-package HTScratch; 
+package HashTableScratch; 
 
 public class HashItem {
     private String key; 
