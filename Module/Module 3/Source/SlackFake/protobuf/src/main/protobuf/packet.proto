@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package slackfake;
+
+option java_multiple_files = true;
+option java_package = "vng.training.w4.slackfake.protobuf";
+option java_outer_classname = "PacketProtos";
+
+message RequestPacket {
+
+    message Register {
+        string username = 1;
+        string password = 2;
+        string name = 3;
+    }
+
+    message Logout {
+        string accessToken = 1;
+    }
+
+    message CreateChannel {
+        string accessToken = 1;
+        string channelName = 2;
+    }
+
+    message ListingChannel {
+        string accessToken = 1;
+    }
+
+    message Login {
+        string username = 1;
+        string password = 2;
+    }
+
+    message JoinChannel {
+        string access_token = 1;
+        string channel_id = 2;
+    }
+
+    message SendMessageToChannel {
+        string access_token = 1;
+        string channel_id = 2;
+        string content = 3;
+        string type = 4;
+    }
+
+    //message ReadAllMessageInChannel{
+    //    string access_token = 1;
+    //    string channel_id = 2;
+    //}
+
+    message ReadMessage {
+        string access_token = 1;
+        string message_id = 2;
+    }
+
+    oneof data {
+        Register register = 2;
+        Logout logout = 3;
+        CreateChannel createChannel = 4;
+        ListingChannel listingChannel = 5;
+        Login login = 6;
+        JoinChannel joinChannel = 7;
+        SendMessageToChannel sendMessageToChannel = 8;
+        ReadMessage readMessage = 9;
+    }
+
+}
+
+message ResponsePacket {
+
+    message Register {
+        enum Status {
+            SUCCESS = 0;
+            USERNAME_EXISTED = 1;
+            INVALID_USERNAME = 2;
+            INVALID_PASSWORD = 3;
+        }
+
+        Status status = 1;
+        optional string message = 2;
+
+    }
+
+    message Logout {
+        enum Status {
+            SUCCESS = 0;
+            INVALID_ACCESS_TOKEN = 1;
+        }
+
+        Status status = 1;
+        optional string message = 2;
+    }
+
+    message CreateChannel {
+        enum Status {
+            SUCCESS = 0;
+            INVALID_ACCESS_TOKEN = 1;
+            INVALID_CHANNEL_NAME = 2;
+            CHANNEL_EXISTED = 3;
+        }
+
+        Status status = 1;
+        optional string message = 2;
+        optional string channelId = 3;
+    }
+
+    message ListingChannel {
+        enum Status {
+            SUCCESS = 0;
+            INVALID_ACCESS_TOKEN = 1;
+        }
+
+        Status status = 1;
+        optional string message = 2;
+        repeated string channelIds = 3;
+    }
+
+    message Login {
+        int32 status_code = 1;
+        string status = 2;
+        optional string accessToken = 3;
+    }
+
+    message JoinChannel {
+        int32 status_code = 1;
+        string status = 2;
+    }
+
+    message SendMessageToChannel {
+        int32 status_code = 1;
+        string status = 2;
+    }
+
+    //message ReadAllMessageInChannel {
+    //    int32 status_code = 1;
+    //    string status = 2;
+    //    repeated string channel_id = 3;
+    //}
+
+    message ReadMessage {
+        int32 status_code = 1;
+        string status = 2;
+        optional string sender_id = 3;
+        optional string content = 4;
+        optional string type = 5;
+        optional string date = 6;
+    }
+
+    message Unknown {
+        string message = 1;
+    }
+
+    oneof response {
+        Register registerResponse = 1;
+        Logout logoutResponse = 2;
+        CreateChannel createChannelResponse = 3;
+        ListingChannel listingChannelResponse = 4;
+        Login loginResponse = 5;
+        JoinChannel joinChannelResponse = 6;
+        SendMessageToChannel sendMessageToChannelResponse = 7;
+        ReadMessage readMessageResponse = 8;
+        Unknown unknownResponse = 9;
+    }
+
+}

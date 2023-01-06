@@ -1,0 +1,9 @@
+<project name="generate-sources">
+    <echo message="Running protoc ..."/>
+    <mkdir dir="${protobuf.generated.sources.dir}"/>
+    <exec executable="protoc">
+        <arg value="--java_out=${protobuf.generated.sources.dir}"/>
+        <arg value="--proto_path=${protobuf.source.dir}"/>
+        <arg value="${protobuf.source.dir}/packet.proto"/>
+    </exec>
+</project>
