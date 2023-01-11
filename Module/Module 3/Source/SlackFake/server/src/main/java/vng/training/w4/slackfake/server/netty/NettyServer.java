@@ -16,16 +16,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import vng.training.w4.slackfake.protobuf.RequestPacket;
-import vng.training.w4.slackfake.server.AppPacketResolver;
 import vng.training.w4.slackfake.server.ChatServer;
 import vng.training.w4.slackfake.server.PacketResolver;
+import vng.training.w4.slackfake.service.UserConnectionService;
 
-import java.io.IOException;
 @Log4j2
 @AllArgsConstructor
 @Component
 public class NettyServer implements ChatServer {
     private final PacketResolver packetResolver;
+    private final UserConnectionService userConnectionService;
 
     @Override
     public void start(String host, int port) throws Exception {
@@ -39,13 +39,13 @@ public class NettyServer implements ChatServer {
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
+                        public void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(
                                     new ProtobufVarint32FrameDecoder(),
                                     new ProtobufDecoder(RequestPacket.getDefaultInstance()),
                                     new ProtobufVarint32LengthFieldPrepender(),
                                     new ProtobufEncoder(),
-                                    new MessageHandler(packetResolver));
+                                    new MessageHandler(packetResolver, userConnectionService));
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -57,4 +57,5 @@ public class NettyServer implements ChatServer {
             bossGroup.shutdownGracefully();
         }
     }
+
 }

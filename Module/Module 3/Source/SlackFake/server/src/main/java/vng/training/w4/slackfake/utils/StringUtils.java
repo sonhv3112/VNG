@@ -1,17 +1,15 @@
 package vng.training.w4.slackfake.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.UUID;
 
 public final class StringUtils {
-    private static final String jwt_key = "secretkey123";
+    private static final String jwt_key = "1234"; //UUID.randomUUID().toString();
 
     public static String MD5(String str) {
         try {
@@ -44,10 +42,15 @@ public final class StringUtils {
     }
 
     public static String decodeUsernameFromAccessToken(String jwt) {
-        Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(jwt_key)
-                .parseClaimsJws(jwt);
-        String username = claims.getBody().get("username", String.class);
-        return username;
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(jwt_key)
+                    .parseClaimsJws(jwt);
+            String username = claims.getBody().get("username", String.class);
+            return username;
+        } catch (SignatureException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

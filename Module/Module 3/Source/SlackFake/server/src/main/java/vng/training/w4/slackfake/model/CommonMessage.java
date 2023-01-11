@@ -1,8 +1,9 @@
 package vng.training.w4.slackfake.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CommonMessage implements Message {
+public class CommonMessage implements Message, Serializable {
 
     private String messageId;
 

@@ -20,5 +20,6 @@ public interface Channel {
     void setMessageIds(List<String> messageIds);
 
     void addMember(String userId);
+    void addMessage(String messageId);
 
 }

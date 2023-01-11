@@ -21,7 +21,13 @@ public final class SecurityUtils {
     }*/
 
     public static boolean isRequireAccessToken(RequestPacket request) {
-        return request.hasOneof(requestDataField) && !(request.hasRegister());
+        switch (request.getDataCase().getNumber()) {
+            case RequestPacket.LOGIN_FIELD_NUMBER:
+            case RequestPacket.REGISTER_FIELD_NUMBER:
+                return false;
+            default:
+                return true;
+        }
     }
 
 }

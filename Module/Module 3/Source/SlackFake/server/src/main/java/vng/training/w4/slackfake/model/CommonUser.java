@@ -1,6 +1,8 @@
 package vng.training.w4.slackfake.model;
 
-public class CommonUser implements User {
+import java.io.Serializable;
+
+public class CommonUser implements User, Serializable {
 
     private String username;
     private String password;
@@ -10,6 +12,7 @@ public class CommonUser implements User {
     private String salt;
 
     public CommonUser(String username, String password, String salt, String name) {
+        this.userId = username;
         this.username = username;
         this.password = password;
         this.salt = salt;

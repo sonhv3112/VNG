@@ -1,22 +1,27 @@
 package vng.training.w4.slackfake.server.netty;
 
+import com.google.common.collect.Multimap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
-import vng.training.w4.slackfake.protobuf.*;
+import vng.training.w4.slackfake.protobuf.RequestPacket;
+import vng.training.w4.slackfake.protobuf.ResponsePacket;
 import vng.training.w4.slackfake.server.PacketResolver;
+import vng.training.w4.slackfake.service.ChatUserConnection;
+import vng.training.w4.slackfake.service.UserConnectionService;
+import vng.training.w4.slackfake.tasks.PacketResolveState;
 
-import java.nio.ByteBuffer;
+import java.util.concurrent.Future;
 
 @Log4j2
 @AllArgsConstructor
-@Component
 public class MessageHandler extends SimpleChannelInboundHandler<RequestPacket> {
+
     private final PacketResolver packetResolver;
+    private final UserConnectionService userConnectionService;
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -27,75 +32,56 @@ public class MessageHandler extends SimpleChannelInboundHandler<RequestPacket> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RequestPacket request) throws Exception {
-//        log.info("Received request...");
-//        switch (request.getDataCase()) {
-//            case LOGIN:
-//                loginHandler(ctx, request);
-//                break;
-//            case LOGOUT:
-//                logoutHandler(ctx, request);
-//                break;
-//            case CREATECHANNEL:
-//                createChannelHandler(ctx, request);
-//                break;
-//            case JOINCHANNEL:
-//                joinChannelHandler(ctx, request);
-//                break;
-//            case LISTINGCHANNEL:
-//                listingChannelHandler(ctx, request);
-//                break;
-//            case READMESSAGE:
-//                readMessageHandler(ctx, request);
-//                break;
-//            case REGISTER:
-//                registerHandler(ctx, request);
-//                break;
-//            case SENDMESSAGETOCHANNEL:
-//                sendMessageToChannelHandler(ctx, request);
-//                break;
-//            default:
-//                log.debug("Invalid request from server Netty!");
-//                break;
-//        }
-        ResponsePacket response = packetResolver.resolve(request);;
-
         String result = request.toString().trim();
-        log.info("From client: " + ctx.channel().remoteAddress());
-        log.info("Message received: " + result);
-        log.info("Sending response: " + response);
+        log.info("Message received from client \"" + ctx.channel().remoteAddress() + "\":\n" + result);
+
+        PacketResolveState state = new PacketResolveState(request);
+        Future<Void> future = packetResolver.resolve(state);
+        future.get();
+
+        final ResponsePacket response = state.get(PacketResolveState.RESPONSE_KEY);
+        if (response == null) {
+            return;
+        }
+
+        log.info("Send response to \"" + ctx.channel().remoteAddress() + "\":\n" + response);
+        if (response.getIsAuthorized() && response.hasLoginResponse()) {
+            ResponsePacket.Login data = response.getLoginResponse();
+            if (data.getStatus() == ResponsePacket.Login.Status.SUCCESS) {
+                ChatUserConnection connection = new NettyConnection(ctx, state.get(PacketResolveState.USER_ID_KEY));
+                userConnectionService.register(connection);
+                log.info("Login success: " + ctx.channel().remoteAddress());
+            }
+        }
 
         ctx.writeAndFlush(response);
-    }
+        /*if (request.getDataCase() == RequestPacket.DataCase.SENDMESSAGETOCHANNEL) {
+            if (response.getReadMessageResponse().getStatus() == ResponsePacket.ReadMessage.Status.SUCCESS) {
+                Collection<ChannelHandlerContext> clientList = clientMap.get(request.getSendMessageToChannel().getChannelId());
+                Iterator<ChannelHandlerContext> iter = clientList.iterator();
+                while (iter.hasNext()) {
+                    ChannelHandlerContext _ctx = iter.next();
+                    boolean isActive = _ctx.channel().isActive();
 
-//    private void registerHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received register request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void logoutHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received logout request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void createChannelHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received create channel request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void listingChannelHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received list channel request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void loginHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received login request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void joinChannelHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received join channel request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void sendMessageToChannelHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received send message request from " + ctx.channel().remoteAddress());
-//    }
-//
-//    private void readMessageHandler(ChannelHandlerContext ctx, RequestPacket request) {
-//        log.info("Received read message request from " + ctx.channel().remoteAddress());
-//    }
+                    if (!isActive) {
+                        iter.remove();
+                        log.debug("Remove \"{}\" from channel {}", _ctx.channel().remoteAddress(), request.getSendMessageToChannel().getChannelId());
+                        continue;
+                    }
+
+                    _ctx.writeAndFlush(response);
+                    log.info("Send response to \"" + _ctx.channel().remoteAddress() + "\":\n" + response);
+                }
+            }
+        } else {
+            ctx.writeAndFlush(response);
+            log.info("Send response to \"" + ctx.channel().remoteAddress() + "\":\n" + response);
+            if (response.getResponseCase() == ResponsePacket.ResponseCase.LISTINGCHANNELRESPONSE) {
+                ResponsePacket.ListingChannel responseList = response.getListingChannelResponse();
+                for (int i = 0; i < responseList.getChannelIdsCount(); ++i) {
+                    clientMap.put(responseList.getChannelIds(i), ctx);
+                }
+            }
+        }*/
+    }
 }
